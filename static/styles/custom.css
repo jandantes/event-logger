@@ -1,8 +1,15 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    margin: '0px auto';
-    font-weight: '300';
-    line-height: '1.5em';
+  font-family: 'Roboto', sans-serif;
+  margin: '0px auto';
+  font-weight: '300';
+  line-height: '1.5em';
+}
+
+#login{
+  background: #505050;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 
 a,

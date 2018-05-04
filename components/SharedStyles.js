@@ -1,5 +1,5 @@
 const styleToolbar = {
-  background: '#FFF',
+  background: '#505050',
   height: '64px',
   paddingRight: '20px',
 };

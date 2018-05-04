@@ -1,33 +1,28 @@
 /* eslint react/prefer-stateless-function: 0 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Head from 'next/head';
+import Grid from 'material-ui/Grid';
+import Typography from 'material-ui/Typography';
 
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 
 class Index extends React.Component {
-  static propTypes = {
-    user: PropTypes.shape({
-      email: PropTypes.string.isRequired,
-    }),
-  };
-
-  static defaultProps = {
-    user: null,
-  };
-
   render() {
-    const { user } = this.props;
     return (
-      <div style={{ padding: '10px 45px' }}>
+      <div style={{ padding: '30px 70px' }}>
         <Head>
           <title>Dashboard</title>
           <meta name="description" content="description" />
         </Head>
-        <p>Dashboard</p>
-        <p>Email: {user.email}</p>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Typography variant="headline">
+              Dashboard
+            </Typography>
+          </Grid>
+        </Grid>
       </div>
     );
   }
