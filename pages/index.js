@@ -13,7 +13,7 @@ class Index extends React.Component {
     return (
       <div style={{ padding: '30px 70px' }}>
         <Head>
-          <title>Dashboard</title>
+          <title>AE - Dashboard</title>
           <meta name="description" content="description" />
         </Head>
         <Grid container spacing={24}>

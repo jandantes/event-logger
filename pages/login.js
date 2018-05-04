@@ -10,7 +10,7 @@ import { styleLoginButton } from '../components/SharedStyles';
 const Login = () => (
   <div style={{ textAlign: 'center' }}>
     <Head>
-      <title>Log in to Altitude Events</title>
+      <title>AE - Login</title>
       <meta name="description" content="Login page" />
     </Head>
     <div id="login">
