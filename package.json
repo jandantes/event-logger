@@ -25,7 +25,8 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-jss": "^8.2.1"
+    "react-jss": "^8.2.1",
+    "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

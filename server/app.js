@@ -5,6 +5,8 @@ import next from 'next';
 import mongoose from 'mongoose';
 import getRootUrl from '../lib/api/getRootUrl';
 import auth from './google';
+import api from './api';
+import logger from './logs';
 
 require('dotenv').config();
 
@@ -49,11 +51,13 @@ app.prepare().then(() => {
 
   auth({ server, ROOT_URL });
 
+  api(server);
+
   server.get('*', (req, res) => handle(req, res));
 
   // starting express server
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on ${ROOT_URL}`); // eslint-disable-line no-console
+    logger.info(`> Ready on ${ROOT_URL}`);
   });
 });
