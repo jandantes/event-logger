@@ -1,18 +1,33 @@
 import express from 'express';
+import jwt from 'jwt-simple';
+
 import logger from '../logs';
 import Event from '../models/Event';
 
+require('dotenv').config();
+
 const router = express.Router();
+const jwtSecret = process.env.JWT_SECRET;
 
 router.use((req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    res.status(401).json({ error: 'Unauthorized' });
-    return;
+  let payload = null;
+
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    payload = jwt.decode(token, jwtSecret);
   }
+
+  if (!payload) {
+    if (!req.user || !req.user.isAdmin) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+  }
+
   next();
 });
 
-router.get('/events', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const events = await Event.list();
     res.json(events);
@@ -21,7 +36,7 @@ router.get('/events', async (req, res) => {
   }
 });
 
-router.post('/events/add', async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
     const event = await Event.add(Object.assign({ metadata: { user: req.user.id } }, req.body));
     res.json(event);
@@ -31,7 +46,7 @@ router.post('/events/add', async (req, res) => {
   }
 });
 
-router.get('/events/detail/:key', async (req, res) => {
+router.get('/detail/:key', async (req, res) => {
   try {
     const event = await Event.getByKey({ key: req.params.key });
     res.json(event);

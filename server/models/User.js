@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import mongoose, { Schema } from 'mongoose';
+import jwt from 'jwt-simple';
 
 import generateSlug from '../utils/slugify';
+
+require('dotenv').config();
 
 const mongoSchema = new Schema({
   googleId: {
@@ -10,10 +13,7 @@ const mongoSchema = new Schema({
     unique: true,
   },
   googleToken: {
-    access_token: String,
-    refresh_token: String,
-    token_type: String,
-    expiry_date: Number,
+    type: Schema.Types.Mixed,
   },
   slug: {
     type: String,
@@ -35,6 +35,7 @@ const mongoSchema = new Schema({
   },
   displayName: String,
   avatarUrl: String,
+  token: String,
 });
 
 class UserClass {
@@ -88,6 +89,16 @@ class UserClass {
     const slug = await generateSlug(this, displayName);
     const userCount = await this.find().count();
 
+    // THIS IS A TEMP SOLUTION FOR THIS TEST ONLY AND SHOULD NOT BE USED IN PRODUCTION
+    // Generate token upon creation of new user for api consumption.
+    // TODO: Access token exchange endpoint
+    const payload = {
+      sub: googleId,
+      iat: Date.now,
+    };
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = await jwt.encode(payload, jwtSecret);
+
     const newUser = await this.create({
       createdAt: new Date(),
       googleId,
@@ -96,6 +107,7 @@ class UserClass {
       displayName,
       avatarUrl,
       slug,
+      token,
       isAdmin: userCount === 0,
     });
 
