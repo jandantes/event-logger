@@ -15,6 +15,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "googleapis": "^24.0.0",
+    "jwt-simple": "^0.5.1",
     "lodash": "^4.17.4",
     "material-ui": "1.0.0-beta.41",
     "mongoose": "^5.0.0-rc0",
