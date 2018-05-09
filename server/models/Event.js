@@ -40,9 +40,11 @@ class EventClass {
   }
 
   static async add({
+    createdBy,
     metadata,
   }) {
     return this.create({
+      createdBy,
       metadata,
     });
   }

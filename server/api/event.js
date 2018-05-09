@@ -24,12 +24,16 @@ router.use((req, res, next) => {
     }
   }
 
+  if (payload) {
+    req.user = { id: payload.sub };
+  }
+
   next();
 });
 
 router.get('/', async (req, res) => {
   try {
-    const events = await Event.list();
+    const events = await Event.list(req.query);
     res.json(events);
   } catch (err) {
     res.json({ error: err.message || err.toString() });
@@ -38,7 +42,7 @@ router.get('/', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   try {
-    const event = await Event.add(Object.assign({ metadata: { user: req.user.id } }, req.body));
+    const event = await Event.add(Object.assign({ createdBy: req.user.id }, req.body));
     res.json(event);
   } catch (err) {
     logger.error(err);
