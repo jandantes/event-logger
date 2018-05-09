@@ -1,12 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
+import moment from 'moment';
+
 import publicId from 'mongoose-public-id';
 
 const mongoSchema = new Schema({
   key: String,
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
   createdBy: {
     type: Schema.ObjectId,
     ref: 'User',
@@ -14,12 +12,34 @@ const mongoSchema = new Schema({
   metadata: {
     type: Schema.Types.Mixed,
   },
+}, {
+  timestamps: {
+    createdAt: 'timestamp',
+  },
 });
 
 class EventClass {
-  static async list({ offset = 0, limit = 10 } = {}) {
-    const count = await this.find().count();
-    const events = await this.find({})
+  static async list({
+    offset = 0,
+    limit = 10,
+    start,
+    end,
+  } = {}) {
+    const format = 'YYYY-MM-DD HH:mm:ss';
+    let query = {};
+    if (start && end) {
+      const startString = moment(start, format);
+      const endString = moment(end, format);
+      query = {
+        timestamp: {
+          $gte: startString,
+          $lt: endString,
+        },
+      };
+    }
+
+    const count = await this.find(query).count();
+    const events = await this.find(query)
       .sort({ timestamp: -1 })
       .skip(parseInt(offset, 10))
       .limit(parseInt(limit, 10));
