@@ -26,6 +26,7 @@ const handle = app.getRequestHandler();
 // Nextjs's server prepared
 app.prepare().then(() => {
   const server = express();
+  server.use(express.json());
 
   // potential fix for Error: Can't set headers
   // try with Chrome Dev Tools open/close
