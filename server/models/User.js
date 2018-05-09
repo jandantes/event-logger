@@ -89,16 +89,6 @@ class UserClass {
     const slug = await generateSlug(this, displayName);
     const userCount = await this.find().count();
 
-    // THIS IS A TEMP SOLUTION FOR THIS TEST ONLY AND SHOULD NOT BE USED IN PRODUCTION
-    // Generate token upon creation of new user for api consumption.
-    // TODO: Access token exchange endpoint
-    const payload = {
-      sub: googleId,
-      iat: Date.now,
-    };
-    const jwtSecret = process.env.JWT_SECRET;
-    const token = await jwt.encode(payload, jwtSecret);
-
     const newUser = await this.create({
       createdAt: new Date(),
       googleId,
@@ -107,11 +97,26 @@ class UserClass {
       displayName,
       avatarUrl,
       slug,
-      token,
       isAdmin: userCount === 0,
     });
 
-    return _.pick(newUser, UserClass.publicFields());
+    // THIS IS A TEMP SOLUTION FOR THIS TEST ONLY AND SHOULD NOT BE USED IN PRODUCTION
+    // Generate token upon creation of new user for api consumption.
+    // TODO: Access token exchange endpoint
+    const payload = {
+      sub: newUser._id,
+      iat: Date.now,
+    };
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = await jwt.encode(payload, jwtSecret);
+
+    const modifier = {
+      token,
+    };
+
+    const updatedUser = await this.findByIdAndUpdate(newUser._id, modifier);
+
+    return _.pick(updatedUser, UserClass.publicFields());
   }
 }
 
