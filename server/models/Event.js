@@ -1,12 +1,15 @@
 import mongoose, { Schema } from 'mongoose';
+import publicId from 'mongoose-public-id';
 
 const mongoSchema = new Schema({
-  key: {
-    type: Schema.Types.ObjectId,
-  },
+  key: String,
   timestamp: {
     type: Date,
     default: Date.now,
+  },
+  createdBy: {
+    type: Schema.ObjectId,
+    ref: 'User',
   },
   metadata: {
     type: Schema.Types.Mixed,
@@ -15,11 +18,15 @@ const mongoSchema = new Schema({
 
 class EventClass {
   static async list({ offset = 0, limit = 10 } = {}) {
+    const count = await this.find().count();
     const events = await this.find({})
       .sort({ timestamp: -1 })
-      .skip(offset)
-      .limit(limit);
-    return { events };
+      .skip(parseInt(offset, 10))
+      .limit(parseInt(limit, 10));
+    return {
+      events,
+      count,
+    };
   }
 
   static async getByKey({ key }) {
@@ -32,10 +39,20 @@ class EventClass {
     return event;
   }
 
-  static async add() {
-    return this.create();
+  static async add({
+    metadata,
+  }) {
+    return this.create({
+      metadata,
+    });
   }
 }
+
+mongoSchema.plugin(publicId, {
+  namespace: 'ae',
+  index: true,
+  fieldName: 'key',
+});
 
 mongoSchema.loadClass(EventClass);
 

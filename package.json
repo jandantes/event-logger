@@ -19,6 +19,7 @@
     "lodash": "^4.17.4",
     "material-ui": "1.0.0-beta.41",
     "mongoose": "^5.0.0-rc0",
+    "mongoose-public-id": "^1.0.2",
     "next": "^5.1.0",
     "nprogress": "^0.2.0",
     "passport": "^0.4.0",
