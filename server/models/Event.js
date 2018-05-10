@@ -11,6 +11,13 @@ const mongoSchema = new Schema({
   },
   metadata: {
     type: Schema.Types.Mixed,
+    validate: {
+      validator: function valueExists(value) {
+        return Object.keys(value).length !== 0;
+      },
+      message: 'metadata has no properties',
+    },
+    required: [true, 'metadata is required'],
   },
 }, {
   timestamps: {
