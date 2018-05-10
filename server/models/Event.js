@@ -24,6 +24,7 @@ class EventClass {
     limit = 10,
     start,
     end,
+    key,
   } = {}) {
     const format = 'YYYY-MM-DD HH:mm:ss';
     let query = {};
@@ -36,6 +37,13 @@ class EventClass {
           $lt: endString,
         },
       };
+    }
+
+    // Optional query by key, this will return an array
+    // /events/detail/key should be use for querying by key
+
+    if (key) {
+      query.key = key;
     }
 
     const count = await this.find(query).count();
