@@ -59,4 +59,13 @@ router.get('/detail/:key', async (req, res) => {
   }
 });
 
+router.delete('/detail/:key', async (req, res) => {
+  try {
+    await Event.removeByKey({ key: req.params.key });
+    res.json({ message: 'Successfully deleted' });
+  } catch (err) {
+    res.json({ error: err.message || err.toString() });
+  }
+});
+
 export default router;

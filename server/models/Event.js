@@ -59,6 +59,15 @@ class EventClass {
     return event;
   }
 
+  static async removeByKey({ key }) {
+    const eventDoc = await this.findOneAndRemove({ key });
+    if (!eventDoc) {
+      throw new Error('Event not found');
+    }
+
+    return true;
+  }
+
   static async add({
     createdBy,
     metadata,
