@@ -82,11 +82,31 @@ Authorization: Bearer [ACCESS TOKEN]
 || **Content:** ```{ error: "Unauthorized" } ``` |
 | **Sample request**  | `/api/v1/events/detail/ae_06AjYoaneEHKkKGwVNE1"` |
 
+### Add an Event 
+|  |  |
+|:---|:---|
+| **URL** | /api/v1/events/add |
+| **Method**  | POST |
+| **Content-Type**  | application/json |
+| **Body**  | ```{ metadata: {} }``` |
+| **Success reponse**  | **Code:** 200 OK |
+||**Content:** ```{"_id":"XXX","createdBy":"XXX","metadata":{},"timestamp":"XXX","updatedAt":"XXX","key":"XXX","__v":0}```|
+| **Success reponse**  | **Code:** 200 OK |
+|| **Content:** ```{"error":"Event validation failed: metadata: metadata has no properties"} ``` |
+| **Success reponse**  | **Code:** 200 OK |
+|| **Content:** ```{"error":"Event validation failed: metadata: metadata is required"} ``` |
+| **Error reponse**  | **Code:** 401 UNAUTHORIZED |
+|| **Content:** ```{ error: "Unauthorized" } ``` |
+| **Sample request**  | ```{ "metadata": { "lat": "14.5995", "lon": "120.9842", "x": 12345, "y": 123 } }```  |
+| **Notes**  | `metadata` is required |
+| | `metadata` must be a valid JSON object |
+| | `metadata` is an "anything goes" SchemaType, its flexibility comes at a trade-off of it being harder to maintain. see Mixed Schematype: http://mongoosejs.com/docs/schematypes.html |
+
 ### Delete an Event by key
 |  |  |
 |:---|:---|
 | **URL** | /api/v1/events/detail/[key]  |
-| **Method**  | DELETE   |
+| **Method**  | DELETE |
 | **Success reponse**  | **Code:** 200 OK |
 ||**Content:** ```{"message":"Successfully deleted"}```|
 | **Success reponse**  | **Code:** 200 OK |
