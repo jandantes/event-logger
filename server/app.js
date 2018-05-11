@@ -9,7 +9,6 @@ const helmet = require('helmet');
 const auth = require('./google');
 const api = require('./api');
 const logger = require('./logs');
-const checkNextBuild = require('./utils/checkNextBuild');
 
 require('dotenv').config();
 
@@ -39,9 +38,6 @@ app.prepare().then(() => {
 
   // pass all Nextjs's request to Nextjs server
   server.get('/_next/*', (req, res) => {
-    if (!dev) {
-      checkNextBuild(req, res);
-    }
     handle(req, res);
   });
 
