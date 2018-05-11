@@ -11,7 +11,7 @@ import withLayout from '../lib/withLayout';
 class Index extends React.Component {
   render() {
     return (
-      <div style={{ padding: '30px 70px' }}>
+      <div style={{ padding: '30px 5%' }}>
         <Head>
           <title>AE - Dashboard</title>
           <meta name="description" content="description" />

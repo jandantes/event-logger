@@ -14,7 +14,13 @@ const styleLoginButton = {
   backgroundColor: '#505050',
 };
 
+const styleWrapText = {
+  wordWrap: 'break-word',
+  whiteSpace: 'normal',
+};
+
 module.exports = {
   styleToolbar,
   styleLoginButton,
+  styleWrapText,
 };

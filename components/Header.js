@@ -18,6 +18,10 @@ Router.onRouteChangeError = () => NProgress.done();
 
 const optionsMenu = [
   {
+    text: 'Admin',
+    href: '/admin',
+  },
+  {
     text: 'Log out',
     href: '/logout',
   },

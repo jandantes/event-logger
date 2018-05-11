@@ -47,6 +47,7 @@ class UserClass {
       'avatarUrl',
       'slug',
       'isAdmin',
+      'token',
     ];
   }
 
