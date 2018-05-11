@@ -9,7 +9,7 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { styleWrapText } from '../components/SharedStyles';
+import { styleWrapText } from '../lib/SharedStyles';
 
 const ProfileDetails = ({ user }) => (
   <div style={{ padding: '30px 5%' }}>

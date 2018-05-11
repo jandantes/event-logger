@@ -1,7 +1,9 @@
-import mongoose, { Schema } from 'mongoose';
-import moment from 'moment';
+const mongoose = require('mongoose');
+const moment = require('moment');
 
-import publicId from 'mongoose-public-id';
+const publicId = require('mongoose-public-id');
+
+const { Schema } = mongoose;
 
 const mongoSchema = new Schema({
   key: String,
@@ -104,4 +106,4 @@ mongoSchema.loadClass(EventClass);
 
 const Event = mongoose.model('Event', mongoSchema);
 
-export default Event;
+module.exports = Event;

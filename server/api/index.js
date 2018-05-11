@@ -1,5 +1,7 @@
-import eventsApi from './event';
+const eventsApi = require('./event');
 
-export default function api(server) {
+function api(server) {
   server.use('/api/v1/events', eventsApi);
 }
+
+module.exports = api;

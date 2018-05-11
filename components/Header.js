@@ -1,20 +1,12 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import Router from 'next/router';
-import NProgress from 'nprogress';
 import Toolbar from 'material-ui/Toolbar';
 import Grid from 'material-ui/Grid';
 import Avatar from 'material-ui/Avatar';
 
 import MenuDrop from './MenuDrop';
 
-import { styleToolbar } from './SharedStyles';
-
-Router.onRouteChangeStart = () => {
-  NProgress.start();
-};
-Router.onRouteChangeComplete = () => NProgress.done();
-Router.onRouteChangeError = () => NProgress.done();
+import { styleToolbar } from '../lib/SharedStyles';
 
 const optionsMenu = [
   {
@@ -24,6 +16,7 @@ const optionsMenu = [
   {
     text: 'Log out',
     href: '/logout',
+    noPrefetch: true,
   },
 ];
 

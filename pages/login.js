@@ -5,7 +5,7 @@ import Avatar from 'material-ui/Avatar';
 
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { styleLoginButton } from '../components/SharedStyles';
+import { styleLoginButton } from '../lib/SharedStyles';
 
 const Login = () => (
   <div style={{ textAlign: 'center' }}>

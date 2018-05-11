@@ -1,8 +1,10 @@
-import _ from 'lodash';
-import mongoose, { Schema } from 'mongoose';
-import jwt from 'jwt-simple';
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const jwt = require('jwt-simple');
 
-import generateSlug from '../utils/slugify';
+const generateSlug = require('../utils/slugify');
+
+const { Schema } = mongoose;
 
 require('dotenv').config();
 
@@ -125,4 +127,4 @@ mongoSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', mongoSchema);
 
-export default User;
+module.exports = User;

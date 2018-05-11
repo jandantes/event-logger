@@ -1,8 +1,8 @@
-import express from 'express';
-import jwt from 'jwt-simple';
+const express = require('express');
+const jwt = require('jwt-simple');
 
-import logger from '../logs';
-import Event from '../models/Event';
+const logger = require('../logs');
+const Event = require('../models/Event');
 
 require('dotenv').config();
 
@@ -68,4 +68,4 @@ router.delete('/detail/:key', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

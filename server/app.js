@@ -1,15 +1,15 @@
-import express from 'express';
-import session from 'express-session';
-import compression from 'compression';
-import mongoSessionStore from 'connect-mongo';
-import next from 'next';
-import mongoose from 'mongoose';
-import helmet from 'helmet';
+const express = require('express');
+const session = require('express-session');
+const compression = require('compression');
+const mongoSessionStore = require('connect-mongo');
+const next = require('next');
+const mongoose = require('mongoose');
+const helmet = require('helmet');
 
-import getRootUrl from '../lib/api/getRootUrl';
-import auth from './google';
-import api from './api';
-import logger from './logs';
+const auth = require('./google');
+const api = require('./api');
+const logger = require('./logs');
+const checkNextBuild = require('./utils/checkNextBuild');
 
 require('dotenv').config();
 
@@ -19,7 +19,7 @@ const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL;
 mongoose.connect(MONGO_URL);
 
 const port = process.env.PORT || 8000;
-const ROOT_URL = getRootUrl();
+const ROOT_URL = dev ? `http://localhost:${port}` : 'https://altitude-events.now.sh';
 
 const sessionSecret = process.env.SESSION_SECRET;
 
@@ -39,6 +39,9 @@ app.prepare().then(() => {
 
   // pass all Nextjs's request to Nextjs server
   server.get('/_next/*', (req, res) => {
+    if (!dev) {
+      checkNextBuild(req, res);
+    }
     handle(req, res);
   });
 
