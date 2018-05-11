@@ -11,16 +11,16 @@ import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { styleWrapText } from '../components/SharedStyles';
 
-const AdminDetails = ({ user }) => (
+const ProfileDetails = ({ user }) => (
   <div style={{ padding: '30px 5%' }}>
     <Head>
-      <title>AE - Admin</title>
+      <title>AE - Profile</title>
       <meta name="description" content="description" />
     </Head>
     <Grid container spacing={24}>
       <Grid item xs={12}>
         <Typography variant="headline">
-          Admin
+          Profile
         </Typography>
         <Grid item xs={6}>
           <Paper style={{ marginTop: 20 }} elevation={1}>
@@ -42,13 +42,13 @@ const AdminDetails = ({ user }) => (
   </div>
 );
 
-class Admin extends React.Component {
+class Profile extends React.Component {
   render() {
-    return <AdminDetails {...this.props} {...this.state} />;
+    return <ProfileDetails {...this.props} {...this.state} />;
   }
 }
 
-AdminDetails.propTypes = {
+ProfileDetails.propTypes = {
   user: PropTypes.shape({
     token: PropTypes.string,
     email: PropTypes.string,
@@ -56,8 +56,8 @@ AdminDetails.propTypes = {
   }),
 };
 
-AdminDetails.defaultProps = {
+ProfileDetails.defaultProps = {
   user: null,
 };
 
-export default withAuth(withLayout(Admin));
+export default withAuth(withLayout(Profile));
