@@ -7,6 +7,7 @@ import Typography from 'material-ui/Typography';
 
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
+import DashboardMain from '../components/Dashboard';
 
 class Index extends React.Component {
   render() {
@@ -21,6 +22,7 @@ class Index extends React.Component {
             <Typography variant="headline">
               Dashboard
             </Typography>
+            <DashboardMain />
           </Grid>
         </Grid>
       </div>
