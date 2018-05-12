@@ -3,6 +3,8 @@
 tmp/
 npm-debug.log
 .DS_Store
+mock/
+dump/
 
 .build/*
 .next
