@@ -17,14 +17,12 @@ class Index extends React.Component {
           <title>AE - Dashboard</title>
           <meta name="description" content="description" />
         </Head>
-        <Grid container spacing={24}>
-          <Grid item xs={12}>
-            <Typography variant="headline">
-              Dashboard
-            </Typography>
-            <DashboardMain />
-          </Grid>
+        <Grid item xs={12}>
+          <Typography variant="headline">
+            Dashboard
+          </Typography>
         </Grid>
+        <DashboardMain />
       </div>
     );
   }

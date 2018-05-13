@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jwt-simple');
+const moment = require('moment');
 
 const Event = require('../models/Event');
 
@@ -30,36 +31,50 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
+  const pipeline = [{
+    $group: {
+      _id: {
+        date: { $dateToString: { format: '%Y-%m-%d', date: '$timestamp' } },
+      },
+      count: { $sum: 1 },
+    },
+  }, {
+    $sort: {
+      '_id.date': 1,
+    },
+  }, {
+    $project: {
+      _id: 0,
+      date: '$_id.date',
+      count: 1,
+    },
+  }];
+
+  const request = req.body;
+  const filterTime = request.start && request.end;
+
+  if (filterTime) {
+    pipeline.unshift({
+      $match: {
+        timestamp: {
+          $gte: moment(request.start).toDate(),
+          $lte: moment(request.end).toDate(),
+        },
+      },
+    });
+  }
+
+  if (request.key) {
+    pipeline.unshift({
+      $match: {
+        key: request.key,
+      },
+    });
+  }
+
   try {
-    const events = await Event.aggregate([{
-      $group: {
-        _id: {
-          year: { $year: '$timestamp' },
-          month: { $month: '$timestamp' },
-          day: { $dayOfMonth: '$timestamp' },
-        },
-        count: { $sum: 1 },
-      },
-    }, {
-      $sort: {
-        '_id.year': 1,
-        '_id.month': 1,
-        '_id.day': 1,
-      },
-    }, {
-      $project: {
-        _id: 0,
-        date: {
-          $concat: [
-            { $substr: ['$_id.day', 0, 1] }, '-',
-            { $substr: ['$_id.month', 0, 2] }, '-',
-            { $substr: ['$_id.year', 0, 4] },
-          ],
-        },
-        count: 1,
-      },
-    }]);
+    const events = await Event.aggregate(pipeline);
     res.json(events);
   } catch (err) {
     res.json({ error: err.message || err.toString() });
