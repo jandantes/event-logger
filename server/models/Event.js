@@ -49,7 +49,7 @@ class EventClass {
     }
 
     // Optional query by key, this will return an array
-    // /events/detail/key should be use for querying by key
+    // /events/detail/key should be used for querying by key
 
     if (key) {
       query.key = key;

@@ -62,7 +62,7 @@ Authorization: Bearer [ACCESS TOKEN]
 ||**Content:** ```{ events: [], count: 0 } ```|
 | **Error reponse**  | **Code:** 401 UNAUTHORIZED |
 || **Content:** ```{ error: "Unauthorized" } ``` |
-| **Sample request**  | `/api/v1/events?start=""&end="2018-05-10T11:39:47"` |
+| **Sample request**  | `/api/v1/events?start="2018-05-1T11:39:47"&end="2018-05-10T11:39:47"` |
 || `/api/v1/events?offset=10&limit=10` |
 || `/api/v1/events?key=ae_QdMexJAqPPuvgvjWeEop` |
 | **Notes**  | `start ` and `end` should be `ISO 8601 Standard timestamp: 2018-05-10T02:26:00` |

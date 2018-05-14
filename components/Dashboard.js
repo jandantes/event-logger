@@ -5,56 +5,107 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Icon from 'material-ui/Icon';
+import Typography from 'material-ui/Typography';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import DateTimePicker from 'material-ui-pickers/DateTimePicker';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { getDashboardMain } from '../lib/api/dashboard';
+import { getDashboardMain, getDashboardList } from '../lib/api/dashboard';
 import notify from '../lib/notifier';
+import { styleWrapText } from '../lib/SharedStyles';
 
 const options = {
   maintainAspectRatio: false,
+  scales: {
+    yAxes: [{
+      display: true,
+      ticks: {
+        beginAtZero: true,
+        fixedStepSize: 1,
+      },
+    }],
+  },
 };
+
+function renderList(event) {
+  return (
+    <Grid container spacing={8} key={event.key}>
+      <Grid item xs={3}>
+        {event.timestamp}
+      </Grid>
+      <Grid item xs={9} style={styleWrapText}>
+        {JSON.stringify(event)}
+      </Grid>
+    </Grid>
+  );
+}
+
 
 class DashboardMain extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: {},
+      dashboard: {},
+      list: [],
+      count: 0,
       filter: {
         key: '',
         start: null,
         end: null,
       },
+      hasMore: true,
     };
 
     this.baseState = this.state;
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchDashboard();
+    this.fetchList();
   }
 
-  fetchData = async (filter) => {
+  fetchDashboard = async (filter) => {
     NProgress.start();
     try {
-      const res = await getDashboardMain(filter);
+      const dashboardData = await getDashboardMain(filter);
       this.setState({ // eslint-disable-line
-        data: {
-          labels: [...res].map(doc => doc.date),
+        dashboard: {
+          labels: [...dashboardData].map(doc => doc.date),
           datasets: [
             {
               label: 'Events',
               backgroundColor: 'rgba(80,80,80,0.2)',
               borderColor: 'rgba(80,80,80,0.4)',
               borderWidth: 1,
-              data: [...res].map(doc => doc.count),
+              data: [...dashboardData].map(doc => doc.count),
             },
           ],
         },
       });
-      if (!res.length) notify('No data');
+      if (!dashboardData.length) notify('No data');
+      NProgress.done();
+    } catch (err) {
+      NProgress.done();
+      notify(err);
+    }
+  };
+
+  fetchList = async (filter) => {
+    try {
+      const query = filter || {};
+      query.skip = this.state.list.length || 0;
+      const listData = await getDashboardList(query);
+      const newList = [...this.state.list, ...listData.events];
+      this.setState({ // eslint-disable-line
+        list: newList,
+        count: listData.count,
+      });
+      if (this.state.list.length >= this.state.count) {
+        this.setState({ hasMore: false });
+      }
+      if (!listData.events.length) notify('No data');
       NProgress.done();
     } catch (err) {
       NProgress.done();
@@ -63,12 +114,18 @@ class DashboardMain extends React.Component {
   };
 
   search = () => {
-    this.fetchData(this.state.filter);
+    this.fetchDashboard(this.state.filter);
+    this.setState({
+      list: [],
+    }, () => this.fetchList(this.state.filter));
   }
 
   reset = () => {
     this.setState(this.baseState);
-    this.fetchData();
+    this.fetchDashboard();
+    this.setState({
+      list: [],
+    }, () => this.fetchList(this.state.filter));
   }
 
   render() {
@@ -161,11 +218,28 @@ class DashboardMain extends React.Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Bar
-              data={this.state.data}
+              data={this.state.dashboard}
               width={100}
               height={300}
               options={options}
             />
+          </Grid>
+        </Grid>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Typography variant="headline">
+              {this.state.count} event{this.state.count > 1 ? 's' : ''}
+            </Typography>
+            <InfiniteScroll
+              style={{ 'overflow-x': 'hidden', 'font-family': 'monospace', 'font-size': '12px' }}
+              dataLength={this.state.list.length}
+              next={this.fetchList}
+              hasMore={this.state.hasMore}
+              height={300}
+              loader={<h4>Loading...</h4>}
+            >
+              {this.state.list.map(event => renderList(event))}
+            </InfiniteScroll>
           </Grid>
         </Grid>
       </div>

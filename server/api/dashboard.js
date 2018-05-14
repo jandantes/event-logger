@@ -81,4 +81,32 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.post('/list', async (req, res) => {
+  const query = {};
+  const request = req.body;
+  const filterTime = request.start && request.end;
+
+  if (filterTime) {
+    query.timestamp = {
+      $gte: moment(request.start).toDate(),
+      $lte: moment(request.end).toDate(),
+    };
+  }
+
+  if (request.key) {
+    query.key = request.key;
+  }
+  try {
+    const events = await Event
+      .find(query)
+      .limit(10)
+      .skip(parseInt(request.skip, 10) || 0)
+      .sort({ timestamp: 1 });
+    const count = await Event.find(query).count();
+    res.json({ events, count });
+  } catch (err) {
+    res.json({ error: err.message || err.toString() });
+  }
+});
+
 module.exports = router;
