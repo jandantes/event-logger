@@ -1,5 +1,5 @@
 {
-  "name": "altitude-events",
+  "name": "event-logger",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
