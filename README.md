@@ -1,6 +1,5 @@
-## Altitude Events
+## Event Logger
 - Built wit React, Next, Express, Material-UI, Mongodb and 3rd party auth with Google OAuth
-- 2-week skill test for Altitude Games
 
 ## Setup for local development
 - Clone the project
